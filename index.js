@@ -22,8 +22,6 @@ function getScreenSize(circleScalar = CIRCLE_RADIUS_DEVISOR) {
   leftCIrcleX = Math.max(window.innerWidth / 2, radius + 20); //20 pixels minimum from the side
   c.width = window.innerWidth;
   c.height = window.innerHeight;
-  outputEl.style.left = leftCIrcleX * 2 + 'px';
-  outputEl.style.width = window.innerWidth - leftCIrcleX * 2 - 70 + 'px';
 }
 
 var HIDE_SLIDERS_DURING_TEST = false;
@@ -146,10 +144,10 @@ function drawCanvas() {
     _testIndex++;
 
     if (_testIndex > TEST_SEQUENCE.length - 1) {
-      testCompleteEl.style.visibility = 'visible';
-      const csv = window.convertArrayOfObjectsToCSV({ data: OUTPUT_DATA });
+      const csv = `${window.convertArrayOfObjectsToCSV({ data: OUTPUT_DATA })}`;
+      outputEl.style.display = 'block';
       console.log(csv);
-      outputEl.innerText = csv;
+      outputEl.innerHTML = csv;
       return;
     }
   }
@@ -181,16 +179,15 @@ window.addEventListener('click', e => {
     quadIndex = 3;
   }
   const testObject = TEST_SEQUENCE[_testIndex];
-  if(!testObject) return
-  if(!testObject.circleColor) return
-  const previousObject = OUTPUT_DATA[OUTPUT_DATA.length - 1] || {}
+  if (!testObject) return;
+  if (!testObject.circleColor) return;
+  const previousObject = OUTPUT_DATA[OUTPUT_DATA.length - 1] || {};
   const rgbCircleStr = testObject.circleColor.substring(4, testObject.circleColor.length - 1);
-  console.log(previousObject.circleColorRGB , rgbCircleStr);
   if (testObject.AFC && previousObject.circleColorRGB !== rgbCircleStr) {
     const rgb = testObject.AFC[quadIndex].substring(4, testObject.AFC[quadIndex].length - 2).split(',');
     OUTPUT_DATA.push({
       Test_Type: 'AF',
-      circleColorRGB: rgbCircleStr,
+      circleColorRGB: rgbCircleStr.split(',').join(' '),
       R: rgb[0],
       G: rgb[1],
       B: rgb[2],

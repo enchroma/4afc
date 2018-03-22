@@ -2,13 +2,13 @@
   "circleScalar":3.2,
   "induction":
   {
-    "holdDuration": 5000,
+    "holdDuration": 1000,
     "backgroundColor": "rgb(128,128,128)",
     "circleColor": "rgb(255,0,0)"
   },
   "intermission":
   {
-    "holdDuration": 3000,
+    "holdDuration": 1000,
     "backgroundColor": "rgb(128,128,128)"
   },
   "tests": [
@@ -16,16 +16,16 @@
     "AFC": ["rgb(193,193,193)", "rgb(0,255,255)", "rgb(221,245,255)", "rgb(221,221,221)"],
     "backgroundColor": "rgb(128,128,128)",
     "circleColor": "rgb(255,0,0)",
-    "holdDuration": 10000,
+    "holdDuration": 2000,
     "afterImageCircleColor": "rgb(255,255,255)",
-    "afterImageDuration": 8000
+    "afterImageDuration": 1000
   },
   {
     "AFC": ["rgb(88,255,147)", "rgb(215,215,93)", "rgb(238,238,238)", "rgb(204,243,232)"],
     "backgroundColor": "rgb(128,128,128)",
     "circleColor": "rgb(255,44,255)",
-    "holdDuration": 10000,
+    "holdDuration": 2000,
     "afterImageCircleColor": "rgb(255,255,255)",
-    "afterImageDuration": 8000
+    "afterImageDuration": 1000
   }]
 }
