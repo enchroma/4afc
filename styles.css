@@ -1,0 +1,106 @@
+  body {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    font-family: 'Nunito', sans-serif;
+  }
+
+  canvas {
+    border: 0;
+  }
+
+  #yui3-css-stamp {
+    display: none;
+  }
+
+  .output {
+    position: absolute;
+    left: 200px;
+    height: 100%;
+    width: 300px;
+  }
+
+  .output-items {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  .output-sliders {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    height: calc(100% - 150px);
+    height: -webkit-calc(100% - 150px);
+  }
+
+  .slider {
+    position: relative;
+    height: 100%;
+  }
+
+  .slider-label {
+    min-width: 30px;
+  }
+
+  .noUi-vertical .noUi-handle {
+    width: 50px;
+    height: 44px;
+    left: -17px;
+  }
+
+  .noUi-vertical .noUi-handle::after,
+  .noUi-vertical .noUi-handle::before {
+    width: 35px;
+    top: 50%;
+    background: #737271;
+  }
+
+  .noUi-vertical .noUi-handle::after {
+    margin-top: 4px;
+  }
+
+  .text-line {
+    padding-bottom: 6px;
+  }
+
+  .download {
+    cursor: pointer;
+    user-select: none;
+    margin-bottom: 6px;
+  }
+
+  .info {
+    display: flex;
+    /*HIDE*/
+    display: none;
+    /*HIDE*/
+    position: relative;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .info--title {
+    margin-top: 6px;
+  }
+
+  .info--data {
+    margin-left: 6px;
+  }
+
+  .test--complete{
+    visibility: hidden;
+    position: fixed;
+    top:50%;
+    left:50%;
+  }
