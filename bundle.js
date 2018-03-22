@@ -84,7 +84,7 @@ var RGBToHex = function RGBToHex(r, g, b) {
   }(bin.toString(16).toUpperCase());
 };
 
-function convertArrayOfObjectsToCSV(args) {
+window.convertArrayOfObjectsToCSV = function (args) {
   var result, ctr, keys, columnDelimiter, lineDelimiter, data;
 
   data = args.data || null;
@@ -113,9 +113,11 @@ function convertArrayOfObjectsToCSV(args) {
   });
 
   return result;
-}
+};
 
-function downloadCSV(obj) {
+window.downloadCSV = function (obj) {
+  var encodeFile = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
   var data, filename, link;
   var csv = convertArrayOfObjectsToCSV({
     data: obj.data
@@ -131,16 +133,18 @@ function downloadCSV(obj) {
   });
   filename = obj.filename || date + '.csv';
 
-  if (!csv.match(/^data:text\/csv/i)) {
+  if (encodeFile && !csv.match(/^data:text\/csv/i)) {
     csv = 'data:text/csv;charset=utf-8,' + csv;
+    data = encodeURI(csv);
   }
-  data = encodeURI(csv);
 
   link = document.createElement('a');
   link.setAttribute('href', data);
   link.setAttribute('download', filename);
   link.click();
-}
+
+  return csv;
+};
 
 window.loadConfig = function (cb) {
   xhr('./config.json', { json: true }, cb);
@@ -185,14 +189,10 @@ var HIDE_SLIDERS_DURING_TEST = false;
 
 var downloadEl = document.querySelector('.download');
 var testCompleteEl = document.querySelector('.test--complete');
+var outputEl = document.querySelector('#output');
 /*HIDE ELEMENTS*/
 downloadEl.style.visibility = 'hidden';
 testCompleteEl.style.visibility = 'hidden';
-
-/*EXPORT CSV*/
-downloadEl.addEventListener('click', function () {
-  downloadCSV({ data: OUTPUT_DATA });
-});
 
 //***********
 // SETUP
@@ -207,55 +207,6 @@ var OUTPUT_DATA = [];
 var _testIndex = 0;
 var _testSequence = [];
 
-//***********
-// internal setup function
-//***********
-// function setTestTimings() {
-//   var _time = 0
-//   RGB_TEST_VALUES.forEach(function(_, i) {
-
-//     _time += STARE_DURATION
-//     /*
-//     Testing testObject
-//     */
-//     _testSequence.push({
-//       endTime: _time,
-//       leftCircleRGB: RGB_TEST_VALUES[i],
-//       leftCircleHSL: rgbToHSL(...RGB_TEST_VALUES[i]),
-//       rightCircleRGB: BACKGROUND_GREY,
-//       isMatchingMode: false,
-//     })
-
-//     _time += MATCH_DURATION
-//     /*
-//     Matching testObject
-//     */
-//     _testSequence.push({
-//       endTime: _time,
-//       leftCircleRGB: WHITE,
-//       rightCircleRGB: WHITE, // will be overwritten by UserColor
-//       isMatchingMode: true,
-//     })
-
-//     _time += RESET_DURATION
-
-//     if (RESET_DURATION) {
-//       /*
-//     RESET
-//     reset testObject
-//     */
-//       _testSequence.push({
-//         endTime: _time,
-//         leftCircleRGB: BACKGROUND_GREY,
-//         rightCircleRGB: BACKGROUND_GREY,
-//         isResetingMode: true,
-//         isMatchingMode: false,
-//       })
-//     }
-//   })
-// }
-
-//***********
 // DRAWING!!!
 /*
     This is a loop at 60fps
@@ -346,6 +297,9 @@ function drawCanvas() {
 
     if (_testIndex > TEST_SEQUENCE.length - 1) {
       testCompleteEl.style.visibility = 'visible';
+      var csv = window.convertArrayOfObjectsToCSV({ data: OUTPUT_DATA });
+      console.log(csv);
+      outputEl.innerText = csv;
       return;
     }
   }
@@ -360,6 +314,41 @@ window.addEventListener('resize', function (e) {
 getScreenSize();
 //drawCanvas();
 drawCanvas();
+
+window.addEventListener('click', function (e) {
+  var x = e.x || e.clientX || e.pageX;
+  var y = e.y || e.clientY || e.pageY;
+  var isRight = x > window.innerWidth / 2;
+  var isBottom = y > window.innerHeight / 2;
+  var quadIndex = void 0;
+  if (isRight && !isBottom) {
+    quadIndex = 1;
+  } else if (!isRight && !isBottom) {
+    quadIndex = 0;
+  } else if (!isRight && isBottom) {
+    quadIndex = 2;
+  } else {
+    quadIndex = 3;
+  }
+  var testObject = TEST_SEQUENCE[_testIndex];
+  if (!testObject) return;
+  if (!testObject.circleColor) return;
+  var previousObject = OUTPUT_DATA[OUTPUT_DATA.length - 1] || {};
+  var rgbCircleStr = testObject.circleColor.substring(4, testObject.circleColor.length - 1);
+  console.log(previousObject.circleColorRGB, rgbCircleStr);
+  if (testObject.AFC && previousObject.circleColorRGB !== rgbCircleStr) {
+    var rgb = testObject.AFC[quadIndex].substring(4, testObject.AFC[quadIndex].length - 2).split(',');
+    OUTPUT_DATA.push({
+      Test_Type: 'AF',
+      circleColorRGB: rgbCircleStr,
+      R: rgb[0],
+      G: rgb[1],
+      B: rgb[2],
+      timestamp: new Date()
+    });
+  }
+});
+
 window.loadConfig(function (err, res) {
   var circleScalar = res.circleScalar;
 

@@ -25,7 +25,11 @@
     "semi": true
   },
   "browserify": {
-    "transform": [["babelify"]]
+    "transform": [
+      [
+        "babelify"
+      ]
+    ]
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

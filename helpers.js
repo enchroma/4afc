@@ -89,7 +89,7 @@ var RGBToHex = function(r, g, b) {
   })(bin.toString(16).toUpperCase());
 };
 
-function convertArrayOfObjectsToCSV(args) {
+window.convertArrayOfObjectsToCSV = (args)=> {
   var result, ctr, keys, columnDelimiter, lineDelimiter, data;
 
   data = args.data || null;
@@ -120,7 +120,7 @@ function convertArrayOfObjectsToCSV(args) {
   return result;
 }
 
-function downloadCSV(obj) {
+window.downloadCSV = (obj, encodeFile = false) =>{
   var data, filename, link;
   var csv = convertArrayOfObjectsToCSV({
     data: obj.data,
@@ -136,15 +136,17 @@ function downloadCSV(obj) {
   });
   filename = obj.filename || date + '.csv';
 
-  if (!csv.match(/^data:text\/csv/i)) {
+  if (encodeFile && !csv.match(/^data:text\/csv/i)) {
     csv = 'data:text/csv;charset=utf-8,' + csv;
+    data = encodeURI(csv);
   }
-  data = encodeURI(csv);
 
   link = document.createElement('a');
   link.setAttribute('href', data);
   link.setAttribute('download', filename);
   link.click();
+
+  return csv
 }
 
 window.loadConfig = function(cb) {

@@ -30,14 +30,10 @@ var HIDE_SLIDERS_DURING_TEST = false;
 
 var downloadEl = document.querySelector('.download');
 var testCompleteEl = document.querySelector('.test--complete');
+var outputEl = document.querySelector('#output');
 /*HIDE ELEMENTS*/
 downloadEl.style.visibility = 'hidden';
 testCompleteEl.style.visibility = 'hidden';
-
-/*EXPORT CSV*/
-downloadEl.addEventListener('click', function() {
-  downloadCSV({ data: OUTPUT_DATA });
-});
 
 //***********
 // SETUP
@@ -52,55 +48,6 @@ var OUTPUT_DATA = [];
 var _testIndex = 0;
 var _testSequence = [];
 
-//***********
-// internal setup function
-//***********
-// function setTestTimings() {
-//   var _time = 0
-//   RGB_TEST_VALUES.forEach(function(_, i) {
-
-//     _time += STARE_DURATION
-//     /*
-//     Testing testObject
-//     */
-//     _testSequence.push({
-//       endTime: _time,
-//       leftCircleRGB: RGB_TEST_VALUES[i],
-//       leftCircleHSL: rgbToHSL(...RGB_TEST_VALUES[i]),
-//       rightCircleRGB: BACKGROUND_GREY,
-//       isMatchingMode: false,
-//     })
-
-//     _time += MATCH_DURATION
-//     /*
-//     Matching testObject
-//     */
-//     _testSequence.push({
-//       endTime: _time,
-//       leftCircleRGB: WHITE,
-//       rightCircleRGB: WHITE, // will be overwritten by UserColor
-//       isMatchingMode: true,
-//     })
-
-//     _time += RESET_DURATION
-
-//     if (RESET_DURATION) {
-//       /*
-//     RESET
-//     reset testObject
-//     */
-//       _testSequence.push({
-//         endTime: _time,
-//         leftCircleRGB: BACKGROUND_GREY,
-//         rightCircleRGB: BACKGROUND_GREY,
-//         isResetingMode: true,
-//         isMatchingMode: false,
-//       })
-//     }
-//   })
-// }
-
-//***********
 // DRAWING!!!
 /*
     This is a loop at 60fps
@@ -200,13 +147,15 @@ function drawCanvas() {
 
     if (_testIndex > TEST_SEQUENCE.length - 1) {
       testCompleteEl.style.visibility = 'visible';
+      const csv = window.convertArrayOfObjectsToCSV({ data: OUTPUT_DATA });
+      console.log(csv);
+      outputEl.innerText = csv;
       return;
     }
   }
   requestAnimationFrame(drawCanvas);
   _previousTime = now;
 }
-
 
 window.addEventListener('resize', function(e) {
   getScreenSize();
@@ -215,6 +164,41 @@ window.addEventListener('resize', function(e) {
 getScreenSize();
 //drawCanvas();
 drawCanvas();
+
+window.addEventListener('click', e => {
+  const x = e.x || e.clientX || e.pageX;
+  const y = e.y || e.clientY || e.pageY;
+  const isRight = x > window.innerWidth / 2;
+  const isBottom = y > window.innerHeight / 2;
+  let quadIndex;
+  if (isRight && !isBottom) {
+    quadIndex = 1;
+  } else if (!isRight && !isBottom) {
+    quadIndex = 0;
+  } else if (!isRight && isBottom) {
+    quadIndex = 2;
+  } else {
+    quadIndex = 3;
+  }
+  const testObject = TEST_SEQUENCE[_testIndex];
+  if(!testObject) return
+  if(!testObject.circleColor) return
+  const previousObject = OUTPUT_DATA[OUTPUT_DATA.length - 1] || {}
+  const rgbCircleStr = testObject.circleColor.substring(4, testObject.circleColor.length - 1);
+  console.log(previousObject.circleColorRGB , rgbCircleStr);
+  if (testObject.AFC && previousObject.circleColorRGB !== rgbCircleStr) {
+    const rgb = testObject.AFC[quadIndex].substring(4, testObject.AFC[quadIndex].length - 2).split(',');
+    OUTPUT_DATA.push({
+      Test_Type: 'AF',
+      circleColorRGB: rgbCircleStr,
+      R: rgb[0],
+      G: rgb[1],
+      B: rgb[2],
+      timestamp: new Date(),
+    });
+  }
+});
+
 window.loadConfig((err, res) => {
   const { circleScalar } = res;
   CIRCLE_RADIUS_DEVISOR = circleScalar;
