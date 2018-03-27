@@ -160,10 +160,9 @@ window.addEventListener('resize', function(e) {
 });
 
 getScreenSize();
-//drawCanvas();
 drawCanvas();
 
-window.addEventListener('click', e => {
+window.addEventListener('touchend', e => {
   const x = e.x || e.clientX || e.pageX;
   const y = e.y || e.clientY || e.pageY;
   const isRight = x > window.innerWidth / 2;
@@ -194,6 +193,7 @@ window.addEventListener('click', e => {
       timestamp: new Date(),
     });
   }
+  _timeElapsed = testObject.holdDuration - 1
 });
 
 window.loadConfig((err, res) => {
