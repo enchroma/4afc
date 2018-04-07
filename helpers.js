@@ -98,7 +98,7 @@ window.convertArrayOfObjectsToCSV = (args)=> {
   }
 
   columnDelimiter = args.columnDelimiter || ',';
-  lineDelimiter = args.lineDelimiter || '\n';
+  lineDelimiter = args.lineDelimiter || '&#013;&#010;';
 
   keys = Object.keys(data[0]);
 
@@ -120,7 +120,7 @@ window.convertArrayOfObjectsToCSV = (args)=> {
   return result;
 }
 
-window.downloadCSV = (obj, encodeFile = false) =>{
+window.downloadCSV = (obj) =>{
   var data, filename, link;
   var csv = convertArrayOfObjectsToCSV({
     data: obj.data,
@@ -136,7 +136,7 @@ window.downloadCSV = (obj, encodeFile = false) =>{
   });
   filename = obj.filename || date + '.csv';
 
-  if (encodeFile && !csv.match(/^data:text\/csv/i)) {
+  if (!csv.match(/^data:text\/csv/i)) {
     csv = 'data:text/csv;charset=utf-8,' + csv;
     data = encodeURI(csv);
   }

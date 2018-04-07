@@ -12,6 +12,15 @@
     border: 0;
   }
 
+  #output{
+    position: fixed;
+    display: none;
+    top:40%;
+    left:30%;
+    width: 350px;
+    height: 400px;
+  }
+
   #yui3-css-stamp {
     display: none;
   }
@@ -100,6 +109,7 @@
 
   .test--complete{
     visibility: hidden;
+    display: none;
     position: fixed;
     top:50%;
     left:50%;

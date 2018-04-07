@@ -93,7 +93,7 @@ window.convertArrayOfObjectsToCSV = function (args) {
   }
 
   columnDelimiter = args.columnDelimiter || ',';
-  lineDelimiter = args.lineDelimiter || '\n';
+  lineDelimiter = args.lineDelimiter || '&#013;&#010;';
 
   keys = Object.keys(data[0]);
 
@@ -116,8 +116,6 @@ window.convertArrayOfObjectsToCSV = function (args) {
 };
 
 window.downloadCSV = function (obj) {
-  var encodeFile = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-
   var data, filename, link;
   var csv = convertArrayOfObjectsToCSV({
     data: obj.data
@@ -133,7 +131,7 @@ window.downloadCSV = function (obj) {
   });
   filename = obj.filename || date + '.csv';
 
-  if (encodeFile && !csv.match(/^data:text\/csv/i)) {
+  if (!csv.match(/^data:text\/csv/i)) {
     csv = 'data:text/csv;charset=utf-8,' + csv;
     data = encodeURI(csv);
   }
@@ -186,8 +184,6 @@ function getScreenSize() {
   leftCIrcleX = Math.max(window.innerWidth / 2, radius + 20); //20 pixels minimum from the side
   c.width = window.innerWidth;
   c.height = window.innerHeight;
-  outputEl.style.left = leftCIrcleX * 2 + 'px';
-  outputEl.style.width = window.innerWidth - leftCIrcleX * 2 - 70 + 'px';
 }
 
 var HIDE_SLIDERS_DURING_TEST = false;
@@ -301,10 +297,10 @@ function drawCanvas() {
     _testIndex++;
 
     if (_testIndex > TEST_SEQUENCE.length - 1) {
-      testCompleteEl.style.visibility = 'visible';
-      var csv = window.convertArrayOfObjectsToCSV({ data: OUTPUT_DATA });
+      var csv = '' + window.convertArrayOfObjectsToCSV({ data: OUTPUT_DATA });
+      outputEl.style.display = 'block';
       console.log(csv);
-      outputEl.innerText = csv;
+      outputEl.innerHTML = csv;
       return;
     }
   }
@@ -340,12 +336,11 @@ window.addEventListener('click', function (e) {
   if (!testObject.circleColor) return;
   var previousObject = OUTPUT_DATA[OUTPUT_DATA.length - 1] || {};
   var rgbCircleStr = testObject.circleColor.substring(4, testObject.circleColor.length - 1);
-  console.log(previousObject.circleColorRGB, rgbCircleStr);
   if (testObject.AFC && previousObject.circleColorRGB !== rgbCircleStr) {
     var rgb = testObject.AFC[quadIndex].substring(4, testObject.AFC[quadIndex].length - 2).split(',');
     OUTPUT_DATA.push({
       Test_Type: 'AF',
-      circleColorRGB: rgbCircleStr,
+      circleColorRGB: rgbCircleStr.split(',').join(' '),
       R: rgb[0],
       G: rgb[1],
       B: rgb[2],
