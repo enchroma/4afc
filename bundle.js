@@ -297,7 +297,7 @@ function drawCanvas() {
     _testIndex++;
 
     if (_testIndex > TEST_SEQUENCE.length - 1) {
-      var csv = '' + window.convertArrayOfObjectsToCSV({ data: OUTPUT_DATA });
+      var csv = "" + window.convertArrayOfObjectsToCSV({ data: OUTPUT_DATA });
       outputEl.style.display = 'block';
       console.log(csv);
       outputEl.innerHTML = csv;

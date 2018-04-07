@@ -7,7 +7,7 @@
     "start": "watchify index.js -o bundle.js -t [ babelify --presets [ env ] --plugins [ transform-object-rest-spread ]]",
     "build:js": " browserify index.js -o bundle.js -t [ envify babelify --presets [ env ] --plugins [ transform-object-rest-spread ]]",
     "build:html": "ejs-cli index.ejs > index.html",
-    "build": "npm-run-all -s -l clean build:html build:js",
+    "build": "npm-run-all -s -l build:html build:js",
     "build:prod": "BUILD_ENV=dist npm-run-all -s -l build:html build:js"
   },
   "keywords": [],
