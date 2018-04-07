@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "watchify index.js -o bundle.js -t [ babelify --presets [ env ] --plugins [ transform-object-rest-spread ]]",
-    "build": "browserify index.js -o bundle.js"
+    "build:js": " browserify index.js -o bundle.js -t [ envify babelify --presets [ env ] --plugins [ transform-object-rest-spread ]]",
+    "build:html": "ejs-cli index.ejs > index.html",
+    "build": "npm-run-all -s -l clean build:html build:js",
+    "build:prod": "BUILD_ENV=dist npm-run-all -s -l build:html build:js"
   },
   "keywords": [],
   "author": "",
@@ -36,6 +39,9 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babelify": "^8.0.0",
+    "ejs-cli": "^2.0.1",
+    "envify": "^4.1.0",
+    "npm-run-all": "^4.1.2",
     "watchify": "^3.11.0"
   }
 }

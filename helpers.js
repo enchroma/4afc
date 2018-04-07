@@ -150,6 +150,6 @@ window.downloadCSV = (obj, encodeFile = false) =>{
 }
 
 window.loadConfig = function(cb) {
-  xhr('./config.json', { json: true }, cb);
+  xhr(`${window.BASE_PATH}config.json`, { json: true }, cb);
 };
 

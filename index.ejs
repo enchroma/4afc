@@ -22,9 +22,11 @@
   <canvas id="myCanvas"></canvas>
   <textarea id="output" ></textarea>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/color-js/1.0.1/color.min.js"></script>
-  
+  <%if (process.env.BUILD_ENV) { %>
       <script src="/4afc/bundle.js"></script>
-  
+  <% }else{ %>
+      <script src="bundle.js"></script>
+  <%} %>
 </body>
 
 </html>

@@ -1,3 +1,7 @@
+window.BASE_PATH = ""
+if (process.env.BUILD_ENV === "dist") {
+  window.BASE_PATH = "/4afc/"
+}
 var helpers = require('./helpers');
 
 //get output div by its class
