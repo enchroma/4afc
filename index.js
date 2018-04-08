@@ -1,5 +1,5 @@
 window.BASE_PATH = ""
-if (process.env.BUILD_ENV === "dist") {
+if (process.env.NODE_ENV === "production") {
   window.BASE_PATH = "/4afc/"
 }
 var helpers = require('./helpers');
