@@ -15,7 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "xhr-request": "^1.1.0"
+    "xhr-request": "1.1.0"
   },
   "prettier": {
     "useTabs": false,
@@ -35,13 +35,13 @@
     ]
   },
   "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "babelify": "^8.0.0",
-    "ejs-cli": "^2.0.1",
-    "envify": "^4.1.0",
-    "npm-run-all": "^4.1.2",
-    "watchify": "^3.11.0"
+    "babel-core": "6.26.0",
+    "babel-plugin-transform-object-rest-spread": "6.26.0",
+    "babel-preset-env": "1.6.1",
+    "babelify": "8.0.0",
+    "ejs-cli": "2.0.1",
+    "envify": "4.1.0",
+    "npm-run-all": "4.1.2",
+    "watchify": "3.11.0"
   }
 }
